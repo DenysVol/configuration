@@ -112,6 +112,8 @@ edx_django_service_default_db_name: '{{ edx_django_service_name }}'
 edx_django_service_default_db_atomic_requests: false
 edx_django_service_db_user: 'REPLACE-ME'
 edx_django_service_db_password: 'password'
+edx_django_service_db_options:
+  connect_timeout: 10
 
 edx_django_service_databases:
   default:
@@ -123,6 +125,7 @@ edx_django_service_databases:
     PORT: '3306'
     ATOMIC_REQUESTS: '{{ edx_django_service_default_db_atomic_requests }}'
     CONN_MAX_AGE: 60
+    OPTIONS: '{{ edx_django_service_db_options }}'
 
 edx_django_service_social_auth_edx_oidc_key: '{{ edx_django_service_name }}-key'
 edx_django_service_social_auth_edx_oidc_secret: '{{ edx_django_service_name }}-secret'
@@ -181,3 +184,11 @@ edx_django_service_config_default:
 # NOTE: This should be overridden by inheriting service-specific role.
 edx_django_service_config_overrides: {}
 edx_django_service_config: '{{ edx_django_service_config_default|combine(edx_django_service_config_overrides) }}'
+
+edx_django_service_automated_users:
+  automated_user:
+    sudo_commands:
+      - command: '{{ edx_django_service_venv_dir }}/python {{ edx_django_service_code_dir }}/manage.py migrate --list'
+        sudo_user: '{{ edx_django_service_user }}'
+    authorized_keys:
+      - 'SSH authorized key'
