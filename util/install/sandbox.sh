@@ -9,10 +9,6 @@
 ##
 
 ##
-## Sanity check
-##
-
-##
 ## Set ppa repository source for gcc/g++ 4.8 in order to install insights properly
 ##
 sudo apt-get install -y python-software-properties
