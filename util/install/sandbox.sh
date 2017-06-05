@@ -51,7 +51,7 @@ VERSION_VARS=(
 ## Clone the configuration repository and run Ansible
 ##
 cd /var/tmp
-git clone https://github.com/DenVol/configuration
+git clone https://github.com/DenysVol/configuration
 cd configuration
 git checkout open-release/eucalyptus.master
 git pull
