@@ -37,49 +37,12 @@ sudo pip install --upgrade setuptools==24.0.3
 sudo -H pip install --upgrade virtualenv==15.0.2
 
 ##
-## Overridable version variables in the playbooks. Each can be overridden
-## individually, or with $OPENEDX_RELEASE.
-##
-VERSION_VARS=(
-  edx_platform_version
-  certs_version
-  forum_version
-  xqueue_version
-  configuration_version
-  demo_version
-  NOTIFIER_VERSION
-  INSIGHTS_VERSION
-  ANALYTICS_API_VERSION
-  ECOMMERCE_VERSION
-  ECOMMERCE_WORKER_VERSION
-  PROGRAMS_VERSION
-)
-
-EXTRA_VARS="-e SANDBOX_ENABLE_ECOMMERCE=True $EXTRA_VARS"
-for var in ${VERSION_VARS[@]}; do
-  # Each variable can be overridden by a similarly-named environment variable,
-  # or OPENEDX_RELEASE, if provided.
-  ENV_VAR=$(echo $var | tr '[:lower:]' '[:upper:]')
-  eval override=\${$ENV_VAR-\$OPENEDX_RELEASE}
-  if [ -n "$override" ]; then
-    EXTRA_VARS="-e $var=$override $EXTRA_VARS"
-  fi
-done
-
-# my-passwords.yml is the file made by generate-passwords.sh.
-if [[ -f my-passwords.yml ]]; then
-    EXTRA_VARS="-e@$(pwd)/my-passwords.yml $EXTRA_VARS"
-fi
-
-CONFIGURATION_VERSION=${CONFIGURATION_VERSION-${OPENEDX_RELEASE-master}}
-
-##
 ## Clone the configuration repository and run Ansible
 ##
 cd /var/tmp
-git clone https://github.com/edx/configuration
+git clone https://github.com/DenysVol/configuration
 cd configuration
-git checkout $CONFIGURATION_VERSION
+git checkout open-release/ficus.master
 git pull
 
 ##
@@ -91,4 +54,4 @@ sudo -H pip install -r requirements.txt
 ##
 ## Run the edx_sandbox.yml playbook in the configuration/playbooks directory
 ##
-cd /var/tmp/configuration/playbooks && sudo -E ansible-playbook -c local ./edx_sandbox.yml -i "localhost," $EXTRA_VARS
+cd /var/tmp/configuration/playbooks && sudo -E ansible-playbook -c local ./edx_sandbox.yml -i "localhost," 
